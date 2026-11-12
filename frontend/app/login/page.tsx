@@ -1,0 +1,53 @@
+import Image from "next/image";
+
+export default function LoginPage() {
+  return (
+    <main className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
+      <div className="w-full max-w-md bg-slate-900 p-8 rounded-2xl border border-slate-800 shadow-xl">
+
+        <h1 className="text-4xl font-bold text-white mb-2">
+          Welcome Back
+        </h1>
+
+        <p className="text-slate-400 mb-8">
+          Sign in to continue to NexCue AI
+        </p>
+
+        <label className="block mb-2 text-slate-300">
+          Email Address
+        </label>
+
+        <input
+          type="email"
+          placeholder="Enter your email"
+          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <label className="block mb-2 text-slate-300">
+          Password
+        </label>
+
+        <input
+          type="password"
+          placeholder="Enter your password"
+          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <button className="w-full bg-blue-600 hover:bg-blue-700 transition p-3 rounded-lg font-semibold">
+          Sign In
+        </button>
+
+        <button className="w-full mt-4 bg-white text-black p-3 rounded-lg font-semibold flex items-center justify-center gap-3 hover:bg-slate-100 transition">
+          <Image
+            src="/google.svg"
+            alt="Google"
+            width={20}
+            height={20}
+          />
+          Continue with Google
+        </button>
+
+      </div>
+    </main>
+  );
+}
