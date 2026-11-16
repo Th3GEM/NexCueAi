@@ -1,6 +1,46 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function RegisterPage() {
+  const router = useRouter();
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleRegister = async () => {
+    try {
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          fullName,
+          email,
+          password,
+        }),
+      });
+
+      const text = await response.text();
+
+      console.log("API RESPONSE:", text);
+
+      if (response.ok) {
+        alert("Account created successfully!");
+        router.push("/dashboard");
+      } else {
+        alert(`Registration failed: ${text}`);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Unexpected error occurred.");
+    }
+  };
+
   return (
     <main className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
       <div className="w-full max-w-md bg-slate-900 p-8 rounded-2xl border border-slate-800 shadow-xl">
@@ -19,8 +59,10 @@ export default function RegisterPage() {
 
         <input
           type="text"
+          value={fullName}
+          onChange={(e) => setFullName(e.target.value)}
           placeholder="Enter your full name"
-          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-5"
         />
 
         <label className="block mb-2 text-slate-300">
@@ -29,8 +71,10 @@ export default function RegisterPage() {
 
         <input
           type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
-          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-5"
         />
 
         <label className="block mb-2 text-slate-300">
@@ -39,11 +83,16 @@ export default function RegisterPage() {
 
         <input
           type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Create a password"
-          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-6"
         />
 
-        <button className="w-full bg-green-600 hover:bg-green-700 transition p-3 rounded-lg font-semibold">
+        <button
+          onClick={handleRegister}
+          className="w-full bg-green-600 hover:bg-green-700 transition p-3 rounded-lg font-semibold"
+        >
           Create Account
         </button>
 
