@@ -9,9 +9,24 @@ export default function RegisterPage() {
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    if (password.length < 8) {
+      alert("Password must be at least 8 characters");
+      return;
+    }
+
     try {
       const response = await fetch("/api/register", {
         method: "POST",
@@ -33,11 +48,11 @@ export default function RegisterPage() {
         alert("Account created successfully!");
         router.push("/dashboard");
       } else {
-        alert(`Registration failed: ${text}`);
+        alert(`Registration failed`);
       }
     } catch (error) {
       console.error(error);
-      alert("Unexpected error occurred.");
+      alert("Something went wrong.");
     }
   };
 
@@ -45,7 +60,7 @@ export default function RegisterPage() {
     <main className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
       <div className="w-full max-w-md bg-slate-900 p-8 rounded-2xl border border-slate-800 shadow-xl">
 
-        <h1 className="text-4xl font-bold text-white mb-2">
+        <h1 className="text-4xl font-bold mb-2">
           Create Account
         </h1>
 
@@ -81,13 +96,49 @@ export default function RegisterPage() {
           Password
         </label>
 
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Create a password"
-          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-6"
-        />
+        <div className="relative mb-5">
+          <input
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="Create a password"
+            className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white"
+          />
+
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-3"
+          >
+            {showPassword ? "🙈" : "👁️"}
+          </button>
+        </div>
+
+        <label className="block mb-2 text-slate-300">
+          Confirm Password
+        </label>
+
+        <div className="relative mb-6">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            value={confirmPassword}
+            onChange={(e) =>
+              setConfirmPassword(e.target.value)
+            }
+            placeholder="Confirm password"
+            className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white"
+          />
+
+          <button
+            type="button"
+            onClick={() =>
+              setShowConfirmPassword(!showConfirmPassword)
+            }
+            className="absolute right-3 top-3"
+          >
+            {showConfirmPassword ? "🙈" : "👁️"}
+          </button>
+        </div>
 
         <button
           onClick={handleRegister}
