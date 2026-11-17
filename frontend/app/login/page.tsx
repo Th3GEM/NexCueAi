@@ -9,8 +9,7 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] =
-    useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     const response = await fetch("/api/login", {
@@ -36,7 +35,7 @@ export default function LoginPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
-      <div className="w-full max-w-md bg-slate-900 p-8 rounded-2xl border border-slate-800">
+      <div className="w-full max-w-md bg-slate-900 p-8 rounded-2xl border border-slate-800 shadow-xl">
 
         <h1 className="text-4xl font-bold mb-2">
           Welcome Back
@@ -47,15 +46,13 @@ export default function LoginPage() {
         </p>
 
         <label className="block mb-2">
-          Email
+          Email Address
         </label>
 
         <input
           type="email"
           value={email}
-          onChange={(e) =>
-            setEmail(e.target.value)
-          }
+          onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter email"
           className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 mb-5"
         />
@@ -66,38 +63,29 @@ export default function LoginPage() {
 
         <div className="relative mb-4">
           <input
-            type={
-              showPassword
-                ? "text"
-                : "password"
-            }
+            type={showPassword ? "text" : "password"}
             value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
+            onChange={(e) => setPassword(e.target.value)}
             placeholder="Enter password"
             className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700"
           />
 
           <button
             type="button"
-            onClick={() =>
-              setShowPassword(
-                !showPassword
-              )
-            }
+            onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-3"
           >
-            {showPassword
-              ? "🙈"
-              : "👁️"}
+            {showPassword ? "🙈" : "👁️"}
           </button>
         </div>
 
         <div className="text-right mb-5">
-          <button className="text-blue-400 hover:text-blue-300">
+          <a
+            href="/forgot-password"
+            className="text-blue-400 hover:text-blue-300"
+          >
             Forgot Password?
-          </button>
+          </a>
         </div>
 
         <button
@@ -107,17 +95,14 @@ export default function LoginPage() {
           Login
         </button>
 
-        <button className="w-full mt-4 bg-white text-black p-3 rounded-lg font-semibold flex items-center justify-center gap-3">
-
+        <button className="w-full mt-4 bg-white text-black p-3 rounded-lg font-semibold flex items-center justify-center gap-3 hover:bg-slate-100 transition">
           <Image
             src="/google.svg"
             alt="Google"
             width={20}
             height={20}
           />
-
           Continue with Google
-
         </button>
 
       </div>
