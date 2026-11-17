@@ -1,50 +1,123 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function LoginPage() {
+  const router = useRouter();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const handleLogin = async () => {
+    const response = await fetch("/api/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        password,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      alert("Login successful!");
+      router.push("/dashboard");
+    } else {
+      alert(data.error);
+    }
+  };
+
   return (
     <main className="min-h-screen flex items-center justify-center bg-slate-950 text-white">
-      <div className="w-full max-w-md bg-slate-900 p-8 rounded-2xl border border-slate-800 shadow-xl">
+      <div className="w-full max-w-md bg-slate-900 p-8 rounded-2xl border border-slate-800">
 
-        <h1 className="text-4xl font-bold text-white mb-2">
+        <h1 className="text-4xl font-bold mb-2">
           Welcome Back
         </h1>
 
         <p className="text-slate-400 mb-8">
-          Sign in to continue to NexCue AI
+          Login to NexCue AI
         </p>
 
-        <label className="block mb-2 text-slate-300">
-          Email Address
+        <label className="block mb-2">
+          Email
         </label>
 
         <input
           type="email"
-          placeholder="Enter your email"
-          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={email}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
+          placeholder="Enter email"
+          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 mb-5"
         />
 
-        <label className="block mb-2 text-slate-300">
+        <label className="block mb-2">
           Password
         </label>
 
-        <input
-          type="password"
-          placeholder="Enter your password"
-          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-6 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
+        <div className="relative mb-4">
+          <input
+            type={
+              showPassword
+                ? "text"
+                : "password"
+            }
+            value={password}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
+            placeholder="Enter password"
+            className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700"
+          />
 
-        <button className="w-full bg-blue-600 hover:bg-blue-700 transition p-3 rounded-lg font-semibold">
-          Sign In
+          <button
+            type="button"
+            onClick={() =>
+              setShowPassword(
+                !showPassword
+              )
+            }
+            className="absolute right-3 top-3"
+          >
+            {showPassword
+              ? "🙈"
+              : "👁️"}
+          </button>
+        </div>
+
+        <div className="text-right mb-5">
+          <button className="text-blue-400 hover:text-blue-300">
+            Forgot Password?
+          </button>
+        </div>
+
+        <button
+          onClick={handleLogin}
+          className="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-lg font-semibold"
+        >
+          Login
         </button>
 
-        <button className="w-full mt-4 bg-white text-black p-3 rounded-lg font-semibold flex items-center justify-center gap-3 hover:bg-slate-100 transition">
+        <button className="w-full mt-4 bg-white text-black p-3 rounded-lg font-semibold flex items-center justify-center gap-3">
+
           <Image
             src="/google.svg"
             alt="Google"
             width={20}
             height={20}
           />
+
           Continue with Google
+
         </button>
 
       </div>
