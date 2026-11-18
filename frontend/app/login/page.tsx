@@ -9,27 +9,44 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] =
+    useState(false);
 
   const handleLogin = async () => {
-    const response = await fetch("/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (data.success) {
-      alert("Login successful!");
-      router.push("/dashboard");
-    } else {
-      alert(data.error);
+      if (data.success) {
+        localStorage.setItem(
+          "token",
+          data.token
+        );
+
+        localStorage.setItem(
+          "user",
+          JSON.stringify(data.user)
+        );
+
+        alert("Login successful!");
+
+        router.push("/dashboard");
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Login failed");
     }
   };
 
@@ -45,37 +62,51 @@ export default function LoginPage() {
           Login to NexCue AI
         </p>
 
-        <label className="block mb-2">
+        <label className="block mb-2 text-slate-300">
           Email Address
         </label>
 
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) =>
+            setEmail(e.target.value)
+          }
           placeholder="Enter email"
-          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 mb-5"
+          className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white mb-5"
         />
 
-        <label className="block mb-2">
+        <label className="block mb-2 text-slate-300">
           Password
         </label>
 
         <div className="relative mb-4">
           <input
-            type={showPassword ? "text" : "password"}
+            type={
+              showPassword
+                ? "text"
+                : "password"
+            }
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
             placeholder="Enter password"
-            className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700"
+            className="w-full p-3 rounded-lg bg-slate-800 border border-slate-700 text-white"
           />
 
           <button
             type="button"
-            onClick={() => setShowPassword(!showPassword)}
+            onClick={() =>
+              setShowPassword(
+                !showPassword
+              )
+            }
             className="absolute right-3 top-3"
           >
-            {showPassword ? "🙈" : "👁️"}
+            {showPassword
+              ? "🙈"
+              : "👁️"}
           </button>
         </div>
 
@@ -90,7 +121,7 @@ export default function LoginPage() {
 
         <button
           onClick={handleLogin}
-          className="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-lg font-semibold"
+          className="w-full bg-blue-600 hover:bg-blue-700 transition p-3 rounded-lg font-semibold"
         >
           Login
         </button>

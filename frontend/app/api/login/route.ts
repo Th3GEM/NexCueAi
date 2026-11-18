@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 export async function POST(request: Request) {
   try {
@@ -18,7 +19,9 @@ export async function POST(request: Request) {
           success: false,
           error: "User not found",
         },
-        { status: 404 }
+        {
+          status: 404,
+        }
       );
     }
 
@@ -33,13 +36,32 @@ export async function POST(request: Request) {
           success: false,
           error: "Invalid password",
         },
-        { status: 401 }
+        {
+          status: 401,
+        }
       );
     }
 
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        email: user.email,
+        fullName: user.fullName,
+      },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: "7d",
+      }
+    );
+
     return NextResponse.json({
       success: true,
-      message: "Login successful",
+      token,
+      user: {
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+      },
     });
   } catch (error) {
     console.error(error);
@@ -49,7 +71,9 @@ export async function POST(request: Request) {
         success: false,
         error: "Login failed",
       },
-      { status: 500 }
+      {
+        status: 500,
+      }
     );
   }
 }
