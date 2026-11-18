@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -68,6 +69,7 @@ export default function LoginPage() {
 
         <input
           type="email"
+          autoComplete="off"
           value={email}
           onChange={(e) =>
             setEmail(e.target.value)
@@ -87,6 +89,7 @@ export default function LoginPage() {
                 ? "text"
                 : "password"
             }
+            autoComplete="new-password"
             value={password}
             onChange={(e) =>
               setPassword(e.target.value)
@@ -126,13 +129,19 @@ export default function LoginPage() {
           Login
         </button>
 
-        <button className="w-full mt-4 bg-white text-black p-3 rounded-lg font-semibold flex items-center justify-center gap-3 hover:bg-slate-100 transition">
+        <button
+          onClick={() =>
+            signIn("google")
+          }
+          className="w-full mt-4 bg-white text-black p-3 rounded-lg font-semibold flex items-center justify-center gap-3 hover:bg-slate-100 transition"
+        >
           <Image
             src="/google.svg"
             alt="Google"
             width={20}
             height={20}
           />
+
           Continue with Google
         </button>
 
